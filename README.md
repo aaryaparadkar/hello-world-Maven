@@ -23,10 +23,11 @@ pipeline {
 }
 
 
+
+
 pipeline {
     agent any
     tools {
-        // Install the Maven version configured as "M3" and add it to the path.
         maven "Maven 3.9.5"
     }
     stages {
@@ -40,12 +41,13 @@ pipeline {
                 bat "mvn clean install"
             }
         }
-        stage('Build Code') {
+        stage('Deploy') {
             steps {
-                sshagent(['tomcatdeploy']) {
-    // some block
-    sh "scp -o StrictHostKeyChecking=no C:\ProgramData\Jenkins\.jenkins\workspace\Maven-propject-pipeline\webapp\target\webapp.war ubuntu@15.206.124.69:/root/apache-tomcat-9.0.82/bin"
-        }
+                script {
+                    sshagent(['tomcatdeploy']) {
+                        sh "scp -o StrictHostKeyChecking=no C:\\ProgramData\\Jenkins\\.jenkins\\workspace\\Maven-propject-pipeline\\webapp\\target\\webapp.war ubuntu@15.206.124.69:/root/apache-tomcat-9.0.82/bin"
+                    }
+                }
             }
         }
     }
